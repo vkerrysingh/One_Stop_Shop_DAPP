@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head ng-app="storeApp">
+  <title>One Stop Shop</title>
+  
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="./app.css" rel='stylesheet' type='text/css'>
+  <link href="./bootstrap.css" rel='stylesheet' type='text/css'>
+  <script src="./app.js"></script>
+  <script src="./storeScripts.js"></script>
+</head>
+
+<body>
+  <div>
+    <nav role="navigation" class="navbar navbar-default">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="#" class="navbar-brand">One Stop Shop</a>
+        </div>
+        <!-- Collection of nav links and other content for toggling -->
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Browse</a></li>                
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><img src="images/people.png">Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+  </div>
+  <br /><br />
+
+  <div class="container">
+      <form>
+        <div class="form-group row">
+          <label for="newId" class="col-xs-2 col-form-label">ID</label>
+          <div class="col-xs-6">
+            <input type="text" class="form-control" id="newId" ng-model="newId" placeholder="newId" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="newStock" class="col-xs-2 col-form-label">Stock</label>
+          <div class="col-xs-6">
+            <input type="text" class="form-control" id="newStock" ng-model="newStock" placeholder="newStock" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="newPrice" class="col-xs-2 col-form-label">Price</label>
+          <div class="col-xs-6">
+            <input type="text" class="form-control" id="newPrice" ng-model="newPrice" placeholder="newPrice" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="newName" class="col-xs-2 col-form-label">Name</label>
+          <div class="col-xs-6">
+            <input type="text" class="form-control" id="newName" ng-model="newName" placeholder="newName" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <button type="submit" class="btn btn-primary">Send invitation</button>
+        </div>
+    </form>
+  </div>
+  
+    <div>
+		<div ng-controller="ProductController">
+            NUmber of products in catalogue {{numProducts}
+        </div>
+	</div>
+    
+    <div>
+        <h3>You have <span class="black"><span id="balance"></span> META</span></h3>
+    </div>
+    
+  <!--
+  <div>
+    <h1>MetaCoin</h1>
+    <h2>Example Truffle Dapp</h2>
+    <h3>You have <span class="black"><span id="balance"></span> META</span></h3>
+
+    <br>
+    <h1>Send</h1>
+    <br><label for="amount">Amount:</label><input type="text" id="amount" placeholder="e.g., 95"></input>
+    <br><label for="receiver">To Address:</label><input type="text" id="receiver" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
+    <br><br><button id="send" onclick="sendCoin()">Send MetaCoin</button>
+    <br><br>
+    <span id="status"></span>
+  </div>
+  -->
+</body>
+</html>
