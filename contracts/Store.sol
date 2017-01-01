@@ -14,6 +14,7 @@ contract Store is Admin {
     address owner;
     
     uint private balance; //holds the value of the contract
+    uint private ownersWallet; //holds what was withdrawn from the contract(balance).
     
     //modifer owner check
     modifier fromOwner {
@@ -45,14 +46,13 @@ contract Store is Admin {
         return true;
     }
     
-    function buyProduct(uint id) returns (bool successful){
+    function buyProduct(uint productId, uint amount) returns (bool successful){
         if (msg.sender != owner || msg.sender != admin)
         {
-            if (products[id].stock >= 1 )
+            if (products[id].stock >= amount )
             {
-                products[id].stock = products[id].stock - 1;
-                balance = balance + products[id].price;
-                
+                products[id].stock = products[id].stock - amount;
+                balance = balance + products[id].price;                
             }
         }
         else

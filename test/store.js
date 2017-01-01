@@ -68,7 +68,7 @@ var expectedExceptionPromise = function (action, gasToUse) {
 
 contract('Store', function(accounts) {
         
-    it("should not add a product if not admin", function() {
+/*    it("should not add a product if not admin", function() {
         var store = Store.deployed();
 
         return expectedExceptionPromise(function() {
@@ -94,6 +94,29 @@ contract('Store', function(accounts) {
        .then(function(count){
            assert.equal(count.valueOf(),0,"should start with empty product list")
        });
+   });
+*/    
+    it("after adding a product, the number of products should increment",function(){
+        var store = Store.deployed();
+        blockNumber = web3.eth.blockNumber + 1;
+        return store.addProduct(1, 10, 9, "shirt",{from: accounts[0], gas:3000000})
+        .then(function(txn){
+            return Promise.all([
+               getEventsPromise(store.LogProductAdded(
+                {},{fromBlock:blockNumber, toBlock:"latest"})),
+                web3.eth.getTransactionReceiptMined(txn)
+            ]);            
+        })
+        .then(function(eventAndreceipt){
+            //console.log(eventAndreceipt);
+            console.log(eventAndreceipt[0][0].args);
+            return store.getNumProducts.call()
+        })
+        .then(function(numIds){
+            console.log("Num of products: "+numIds.toString());
+            assert.equal(numIds.valueOf(),1,"should have one product added");
+        })
+        
    });
    
 });
