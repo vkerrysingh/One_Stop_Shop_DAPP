@@ -68,7 +68,7 @@ var expectedExceptionPromise = function (action, gasToUse) {
 
 contract('Store', function(accounts) {
         
-/*    it("should not add a product if not admin", function() {
+    it("should not add a product if not admin", function() {
         var store = Store.deployed();
 
         return expectedExceptionPromise(function() {
@@ -95,7 +95,7 @@ contract('Store', function(accounts) {
            assert.equal(count.valueOf(),0,"should start with empty product list")
        });
    });
-*/    
+    
     it("after adding a product, the number of products should increment",function(){
         var store = Store.deployed();
         blockNumber = web3.eth.blockNumber + 1;
