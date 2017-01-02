@@ -22,18 +22,19 @@ contract Store is Admin {
         _;
     }
     
+    modifier authRole {
+        if (msg.sender == owner || msg.sender == admin) throw;
+        _;
+    }
+    
     //events
     event LogProductAdded(uint id, uint price, uint stock, string name);
+    event LogProductPurchased(uint id, uint productAmount, uint pricePaid);
     
     function Store(){
         owner = msg.sender;
         balance = 0;
     }
-    
-    function getNumProducts() returns (uint productCount){
-        return ids.length;
-    }
-    
     
     function addProduct(uint id, uint price, uint stock, string name) fromAdmin returns (bool successful){
         products[id] = Product({
@@ -46,17 +47,34 @@ contract Store is Admin {
         return true;
     }
     
-    function buyProduct(uint productId, uint amount) returns (bool successful){
-        if (msg.sender != owner || msg.sender != admin)
-        {
-            if (products[id].stock >= amount )
-            {
-                products[id].stock = products[id].stock - amount;
-                balance = balance + products[id].price;                
+    function buyProduct(uint productId, uint productAmount) payable authRole returns (uint price){
+                
+        if (products[productId].stock >= productAmount ){
+            if (msg.value == products[productId].price){
+                products[productId].stock = products[productId].stock - productAmount;
+                balance = balance + msg.value;   
+                if (!owner.send(msg.value))
+                    throw;
+                LogProductPurchased(productId, productAmount, msg.value);
+                return owner.balance;
             }
+            else
+                throw;
         }
         else
-            throw;        
+            throw;                        
+    }
+    
+    function getNumProducts() returns (uint productCount){
+        return ids.length;
+    }
+    
+    function getProductStockCount(uint productId) returns (uint stockCount){
+        return products[productId].stock;
+    }
+    
+    function setAdmin(address adminAddress) returns (bool success){
+        admin = adminAddress;
     }
     
     function getBalance() returns (uint){

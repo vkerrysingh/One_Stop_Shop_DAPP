@@ -95,7 +95,7 @@ contract('Store', function(accounts) {
            assert.equal(count.valueOf(),0,"should start with empty product list")
        });
    });
-    
+     
     it("after adding a product, the number of products should increment",function(){
         var store = Store.deployed();
         blockNumber = web3.eth.blockNumber + 1;
@@ -118,5 +118,39 @@ contract('Store', function(accounts) {
         })
         
    });
-   
+  
+    //Test for purchasing  
+    it("should allow a user to purchase a product", function(){
+        
+        var store = Store.deployed();        
+        return store.getNumProducts.call()
+       .then(function(count){
+            store.setAdmin(accounts[1],{gas:3000000});
+            console.log("Num of products: "+count.toString());
+            assert.equal(count.valueOf(),1,"should have product added from prior test");
+            return store.buyProduct(1, 1,{from:accounts[2], value: 10, gas:3000000})
+       })
+        .then(function(txn){
+            return Promise.all([
+               getEventsPromise(store.LogProductPurchased(
+                {},{fromBlock:blockNumber, toBlock:"latest"})),
+                web3.eth.getTransactionReceiptMined(txn)
+            ]);            
+        })
+        .then(function(eventAndreceipt){
+            //console.log(eventAndreceipt);
+            console.log(eventAndreceipt[0][0].args);
+            return store.getBalance.call()
+        })
+        .then(function(balance){
+            console.log("Contract balance: "+balance.toString());
+            assert.equal(balance.valueOf(),10,"should be the price of 1 product");
+            return store.getProductStockCount.call(1)
+        })
+        .then(function(stockCount){
+            console.log("Stock count :",stockCount.toString());
+            assert.equal(stockCount.valueOf(),8,"stck count should decrease by 1");
+        })
+    });
+    
 });
