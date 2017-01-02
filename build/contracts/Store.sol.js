@@ -604,23 +604,6 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "name": "LogProductAdded",
         "type": "event"
       },
-      "0xc0254a79a9b20b1bf3b1bf6b3544eaa738f906d6b89dece2d7fafb5cacb946d7": {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": false,
-            "name": "id",
-            "type": "uint256"
-          },
-          {
-            "indexed": false,
-            "name": "amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "LogProductPurchased",
-        "type": "event"
-      },
       "0xa5afe36a8ff5fa46b8955408e1fa2946423fb00373e17466194718362cc58be2": {
         "anonymous": false,
         "inputs": [
@@ -644,9 +627,7 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         "type": "event"
       }
     },
-    "updated_at": 1483319039184,
-    "links": {},
-    "address": "0x54456239b76bf96d7776fb41aed6b56930a0e25e"
+    "updated_at": 1483319998284
   }
 };
 
