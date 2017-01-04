@@ -22,7 +22,7 @@ contract Store is Admin {
         _;
     }
     
-    modifier authRole {
+    modifier notFromAuthUser {
         if (msg.sender == owner || msg.sender == admin) throw;
         _;
     }
@@ -32,8 +32,7 @@ contract Store is Admin {
     event LogProductPurchased(uint id, uint productAmount, uint pricePaid);
     
     function Store(){
-        owner = msg.sender;
-        balance = 0;
+        owner = msg.sender;        
     }
     
     function addProduct(uint id, uint price, uint stock, string name) fromAdmin returns (bool successful){
@@ -43,20 +42,18 @@ contract Store is Admin {
             name: name
         });
         ids.push(id);
+        
         LogProductAdded(id, price, stock, name );
         return true;
     }
     
-    function buyProduct(uint productId, uint productAmount) payable authRole returns (uint price){
-                
+    //Check that sender is not an owner or an admin
+    function buyProduct(uint productId, uint productAmount) payable notFromAuthUser returns (bool successful) {
         if (products[productId].stock >= productAmount ){
-            if (msg.value == products[productId].price){
-                products[productId].stock = products[productId].stock - productAmount;
-                balance = balance + msg.value;   
-                if (!owner.send(msg.value))
-                    throw;
+            if (msg.value == (products[productId].price * productAmount)) {
+                products[productId].stock -= productAmount;                                
                 LogProductPurchased(productId, productAmount, msg.value);
-                return owner.balance;
+                return true;
             }
             else
                 throw;
@@ -65,7 +62,16 @@ contract Store is Admin {
             throw;                        
     }
     
-    function getNumProducts() returns (uint productCount){
+    function withdrawFromContract(uint amount) payable returns (bool successful){
+        if (amount >= this.balance){            
+            if(!owner.send(this.balance - amount))
+                throw;
+        }
+        else
+            throw;
+    }
+    
+    function getProductCount() returns (uint productCount){
         return ids.length;
     }
     
@@ -73,11 +79,14 @@ contract Store is Admin {
         return products[productId].stock;
     }
     
-    function setAdmin(address adminAddress) returns (bool success){
+    function setAdmin(address adminAddress) private returns (bool success){
         admin = adminAddress;
+        return true;
     }
     
-    function getBalance() returns (uint){
-        return balance;
+    function getBalance() constant returns (uint){
+        return this.balance;
     }
+    
+    
 }
